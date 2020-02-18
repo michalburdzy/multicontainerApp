@@ -1,0 +1,54 @@
+version: '3'
+services:
+  postgres:
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  redis:
+    image: "redis:alpine"
+    entrypoint: redis-server --appendonly yes
+
+  api:
+    depends_on:
+      - redis
+      - postgres
+    build:
+      context: ./server
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./server:/app
+    env_file:
+      - .env
+
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules
+      - ./worker:/app
+    env_file:
+      - .env
+
+  nginx:
+    logging:
+      driver: none
+    depends_on:
+      - api
+      - client
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports:
+      - "3000:80"
