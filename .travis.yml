@@ -5,26 +5,26 @@ services:
   - docker
 
 before_install:
-  - docker build -t michalburdzy/multicontainer/server-test -f ./server/Dockerfile ./server
-  - docker build -t michalburdzy/multicontainer/client-test -f ./client/Dockerfile.dev ./client
+  - docker build -t mmicalt/multicontainer/server-test -f ./server/Dockerfile ./server
+  - docker build -t mmicalt/multicontainer/client-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true michalburdzy/multicontainer/server-test npm run test
-  - docker run -e CI=true michalburdzy/multicontainer/client-test npm run test
+  - docker run -e CI=true mmicalt/multicontainer/server-test npm run test
+  - docker run -e CI=true mmicalt/multicontainer/client-test npm run test
 
 after_success:
-  - docker build -t michalburdzy/multicontainer/client ./client
-  - docker build -t michalburdzy/multicontainer/server ./server
-  - docker build -t michalburdzy/multicontainer/worker ./worker
-  - docker build -t michalburdzy/multicontainer/worker ./worker
-  - docker build -t michalburdzy/multicontainer/nginx ./nginx
+  - docker build -t mmicalt/multicontainer/client ./client
+  - docker build -t mmicalt/multicontainer/server ./server
+  - docker build -t mmicalt/multicontainer/worker ./worker
+  - docker build -t mmicalt/multicontainer/worker ./worker
+  - docker build -t mmicalt/multicontainer/nginx ./nginx
 
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push michalburdzy/multicontainer/client
-  - docker push michalburdzy/multicontainer/server
-  - docker push michalburdzy/multicontainer/worker
-  - docker push michalburdzy/multicontainer/worker
-  - docker push michalburdzy/multicontainer/nginx
+  - docker push mmicalt/multicontainer/client
+  - docker push mmicalt/multicontainer/server
+  - docker push mmicalt/multicontainer/worker
+  - docker push mmicalt/multicontainer/worker
+  - docker push mmicalt/multicontainer/nginx
 
 
 # deploy:
