@@ -5,26 +5,26 @@ services:
   - docker
 
 before_install:
-  - docker build -t mmicalt/multicontainer/server-test -f ./server/Dockerfile ./server
-  - docker build -t mmicalt/multicontainer/client-test -f ./client/Dockerfile.dev ./client
+  - docker build -t mmicalt/multicontainer_server-test -f ./server/Dockerfile ./server
+  - docker build -t mmicalt/multicontainer_client-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true mmicalt/multicontainer/server-test npm run test
-  - docker run -e CI=true mmicalt/multicontainer/client-test npm run test
+  - docker run -e CI=true mmicalt/multicontainer_server-test npm run test
+  - docker run -e CI=true mmicalt/multicontainer_client-test npm run test
 
 after_success:
-  - docker build -t mmicalt/multicontainer/client ./client
-  - docker build -t mmicalt/multicontainer/server ./server
-  - docker build -t mmicalt/multicontainer/worker ./worker
-  - docker build -t mmicalt/multicontainer/worker ./worker
-  - docker build -t mmicalt/multicontainer/nginx ./nginx
+  - docker build -t mmicalt/multicontainer_client ./client
+  - docker build -t mmicalt/multicontainer_server ./server
+  - docker build -t mmicalt/multicontainer_worker ./worker
+  - docker build -t mmicalt/multicontainer_worker ./worker
+  - docker build -t mmicalt/multicontainer_nginx ./nginx
 
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
-  - docker push mmicalt/multicontainer/client
-  - docker push mmicalt/multicontainer/server
-  - docker push mmicalt/multicontainer/worker
-  - docker push mmicalt/multicontainer/worker
-  - docker push mmicalt/multicontainer/nginx
+  - docker push mmicalt/multicontainer_client
+  - docker push mmicalt/multicontainer_server
+  - docker push mmicalt/multicontainer_worker
+  - docker push mmicalt/multicontainer_worker
+  - docker push mmicalt/multicontainer_nginx
 
 
 # deploy:
