@@ -2,7 +2,37 @@
   "AWSEBDockerrunVersion": 2,
   "containerDefinitions": [
     {
-      "name": "client"
+      "name": "client",
+      "image": "mmicalt/multicontainer_client",
+      "hostname": "client",
+      "essential": false
+    },
+    {
+      "name": "server",
+      "image": "mmicalt/multicontainer_server",
+      "hostname": "api",
+      "essential": false
+    },
+    {
+      "name": "worker",
+      "image": "mmicalt/multicontainer_worker",
+      "hostname": "worker",
+      "essential": false
+    },
+    {
+      "name": "nginx",
+      "image": "mmicalt/multicontainer_nginx",
+      "hostname": "nginx",
+      "essential": true,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "container": 80
+        }
+      ],
+      "links": [
+        "client", "server"
+      ]
     }
   ]
 }

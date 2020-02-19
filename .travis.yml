@@ -27,14 +27,15 @@ after_success:
   - docker push mmicalt/multicontainer_nginx
 
 
-# deploy:
-#   provider: elasticbeanstalk
-#   region: "eu-central-1"
-#   app: "multicontainerApp"
-#   env: "MulticontainerApp-env"
-#   bucket_name: ""
-#   bucket_path: "multicontainerApp"
-#   on:
-#     branch: master
-#   access_key_id: $AWS_ACCESS_KEY
-#   secret_access_key: $AWS_SECRET_KEY
+deploy:
+  edge: true
+  provider: elasticbeanstalk
+  region: "eu-central-1"
+  app: "multicontainer"
+  env: "Multicontainer-env"
+  bucket_name: "elasticbeanstalk-eu-central-1-757404671799"
+  bucket_path: "multicontainer"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_KEY

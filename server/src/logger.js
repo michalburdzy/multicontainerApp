@@ -4,7 +4,7 @@ class Logger {
   constructor({ logger, config }) {
     this.logger = logger({
       prettyPrint: true,
-      name: config.appName,
+      name: config.appName || 'server',
       level: config.loggerLevel,
     });
   }
