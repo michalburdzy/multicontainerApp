@@ -1,0 +1,75 @@
+version: "3"
+services:
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    entrypoint: redis-server --appendonly yes
+
+  postgres:
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  api_getter:
+    depends_on:
+      - postgres
+    build:
+      context: ./api_getter
+      dockerfile:  Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./api_getter:/app
+    env_file:
+      - .env
+    command: npm run dev
+
+  # api_worker:
+  #   depends_on:
+  #     - redis
+  #     - postgres
+  #   # build:
+  #   #   context:
+  #   #   dockerfile
+  #   # volumes:
+  #   env_file:
+  #     - .env
+
+  # worker:
+  #   depends_on:
+  #     - redis
+  #   links:
+  #     - redis
+  #   build:
+  #     context: ./worker
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - /app/node_modules
+  #     - ./worker:/app
+  #   env_file:
+  #     - .env
+  #   command: npm run dev
+
+  api_setter:
+    depends_on:
+      - redis
+      # - api_worker
+    links:
+      - redis
+    build:
+      context: ./api_setter
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ./api_setter:/app
+    env_file:
+      - .env
+    ports:
+      - ${API_SETTER_PORT}:${API_SETTER_PORT}
+    command: npm run dev
+
+  # client:
+  #   depends_on:
+  #     - api_getter
+  #     - api_setter
+

@@ -1,0 +1,51 @@
+{
+  "name": "oop-express",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node -r dotenv/config src/server.js",
+    "dev": "nodemon -r dotenv/config --inspect src/server.js",
+    "jest": "jest --runInBand",
+    "test": "npm run jest ./test/unit ./test/integration --coverage",
+    "lint": "eslint ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "celebrate": "^11.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jest": "^24.9.0",
+    "mongoose": "^5.8.7",
+    "pino": "^5.16.0",
+    "pino-pretty": "^3.5.0",
+    "redis": "^3.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.0",
+    "eslint-plugin-jest": "^23.6.0",
+    "husky": "^4.0.9",
+    "nodemon": "^2.0.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run lint && npm run test"
+    }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmicalt/express-oop-boilerplate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mmicalt/express-oop-boilerplate/issues"
+  },
+  "homepage": "https://github.com/mmicalt/express-oop-boilerplate#readme",
+  "description": ""
+}

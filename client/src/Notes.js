@@ -5,20 +5,34 @@ const Notes  = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
 
-  useEffect(async () => {
-    const response = await axios.get('/api/notes');
-    setNotes([...notes, ...response.data.notes])
-  }, [notes])
+  const fetchNotes = async () => {
+    try {
+      const response = await axios.get('/api/notes');
+      setNotes(response.data.notes);
+    } catch(error){
+      console.log(error);
+      return [];
+    }
+  }
+  useEffect(() => {
+  async function getInitialNotes() {
+    await fetchNotes();
+  }
+  getInitialNotes();
+  }, [notes]);
 
   const handleSubmit = async event => {
     event.preventDefault();
 
-    await axios.post('/api/notes', {
-      note: newNote
-    });
+    try {
+      await axios.post('/api/notes', {
+        note: newNote
+      });
+    } catch(error){
+      console.log(error);
+    }
 
-    const newNotes = await axios.get('/api/notes');
-    setNotes(newNotes.data.notes)
+    await fetchNotes();
   };
 
   const renderAllNotes = () => {
@@ -36,7 +50,8 @@ const Notes  = () => {
       <div>
         <form onSubmit={handleSubmit}>
           <label>Add a new note:</label>
-          <input value={newNote} onChange={(e) => setNewNote(e.target.value)} />
+          <input value={newNote} onChange={(e) => setNewNote(e.target.value)}
+           />
           <button>Submit</button>
         </form>
 
