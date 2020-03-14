@@ -1,4 +1,4 @@
-const REQUIRED_CONFIG_FIELDS = [ 'APP_PORT', 'REDIS_PORT', 'REDIS_HOST', 'PG_USER', 'PG_HOST', 'PG_DATABASE', 'PG_PASSWORD', 'PG_PORT'];
+const REQUIRED_CONFIG_FIELDS = [ 'API_WORKER_PORT', 'REDIS_PORT', 'REDIS_HOST', 'PG_USER', 'PG_HOST', 'PG_DATABASE', 'PG_PASSWORD', 'PG_PORT'];
 
 const checkConfigData = (config) => {
   if (config.NODE_ENV === 'test') {
@@ -16,7 +16,7 @@ module.exports = (config = process.env) => {
   checkConfigData(config);
 
   return {
-    appPort: config.APP_PORT,
+    appPort: config.API_WORKER_PORT,
     loggerLevel: 'info',
     redisPort: config.REDIS_PORT,
     redisHost: config.REDIS_HOST,

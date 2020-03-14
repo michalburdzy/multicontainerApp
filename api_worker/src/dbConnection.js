@@ -15,7 +15,7 @@ class PgClientFactory  {
     this.pgClient.on('error', (error) => {
       throw AppError.serviceUnavailable('PostgreSQL - lost connection', error);
     });
-    this.pgClient.query('CREATE TABLE IF NOT EXISTS values (number INT)')
+    this.pgClient.query('CREATE TABLE IF NOT EXISTS notes(note varchar(100))')
     .catch(err => console.log(err));
   }
 

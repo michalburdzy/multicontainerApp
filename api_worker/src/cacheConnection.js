@@ -14,10 +14,10 @@ const cacheClientFactory = (config, cache) => {
     throw AppError.serviceUnavailable(error);
   });
 
-  const cachePublisher = cacheClient.duplicate();
+  const subscriber = cacheClient.duplicate();
 
   return {
-    client: cacheClient, publisher: cachePublisher,
+    client: cacheClient, subscriber,
   };
 };
 

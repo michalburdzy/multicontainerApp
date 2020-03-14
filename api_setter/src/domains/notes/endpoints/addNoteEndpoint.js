@@ -19,11 +19,7 @@ class AddNoteEndpoint extends BaseEndpoint {
 
     const response = await this.service.process(note);
 
-    // if (!response) {
-    //   throw AppError.unprocessableEntity();
-    // }
-
-    return new AppResponse(200, response);
+    return new AppResponse(200, {message: JSON.stringify(response)});
   }
 }
 
