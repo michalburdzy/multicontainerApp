@@ -40,21 +40,6 @@ services:
       - .env
     command: npm run dev
 
-  # worker:
-  #   depends_on:
-  #     - redis
-  #   links:
-  #     - redis
-  #   build:
-  #     context: ./worker
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - /app/node_modules
-  #     - ./worker:/app
-  #   env_file:
-  #     - .env
-  #   command: npm run dev
-
   api_setter:
     depends_on:
       - redis
@@ -73,8 +58,13 @@ services:
       - ${API_SETTER_PORT}:${API_SETTER_PORT}
     command: npm run dev
 
-  # client:
-  #   depends_on:
-  #     - api_getter
-  #     - api_setter
-
+  client:
+    depends_on:
+      - api_getter
+      - api_setter
+    links:
+      - api_getter
+      - api_setter
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev

@@ -17,13 +17,13 @@ class GetAllNotesEndpoint extends BaseEndpoint {
   async process() {
     this.logger.info('ENDPOINT: getAllNotesEndpoint');
 
-    const response = await this.service.process();
+    const notes = await this.service.process();
 
-    if (!response) {
+    if (!notes) {
       throw new AppError();
     }
 
-    return new AppResponse(200, response);
+    return new AppResponse(200, notes);
   }
 }
 

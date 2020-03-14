@@ -4,43 +4,46 @@ import axios from 'axios';
 const Notes  = () => {
   const [notes, setNotes] = useState([])
   const [newNote, setNewNote] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const fetchNotes = async () => {
     try {
       const response = await axios.get('/api/notes');
-      setNotes(response.data.notes);
+      setNotes(response.data);
     } catch(error){
       console.log(error);
-      return [];
     }
   }
   useEffect(() => {
-  async function getInitialNotes() {
+  async function getNotesFromApi() {
     await fetchNotes();
   }
-  getInitialNotes();
-  }, [notes]);
+  getNotesFromApi();
+  }, [isSubmitting]);
 
   const handleSubmit = async event => {
     event.preventDefault();
-
+    setIsSubmitting(true)
     try {
       await axios.post('/api/notes', {
         note: newNote
       });
     } catch(error){
       console.log(error);
+    } finally {
+      setNewNote('')
+      setTimeout(() => {
+        setIsSubmitting(false)
+      }, 100)
     }
-
-    await fetchNotes();
   };
 
   const renderAllNotes = () => {
     return (
       <div>
         {
-          notes.map(note => (
-          <div>{note}</div>
+          (notes || []).map(n => (
+          <div key={n.note}>{n.note}</div>
         ))}
       </div>
     )

@@ -1,5 +1,23 @@
 version: "3"
 services:
+  nginx:
+    ports:
+      - "3000:80"
+    links:
+      - api_getter
+      - api_setter
+      - api_worker
+      - client
+    depends_on:
+      - api_getter
+      - api_setter
+      - api_worker
+      - client
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    restart: always
+
   redis:
     image: "redis:alpine"
     ports:
@@ -36,21 +54,6 @@ services:
     env_file:
       - .env
 
-  # worker:
-  #   depends_on:
-  #     - redis
-  #   links:
-  #     - redis
-  #   build:
-  #     context: ./worker
-  #     dockerfile: Dockerfile
-  #   volumes:
-  #     - /app/node_modules
-  #     - ./worker:/app
-  #   env_file:
-  #     - .env
-  #   command: npm run dev
-
   api_setter:
     depends_on:
       - redis
@@ -66,8 +69,11 @@ services:
     env_file:
       - .env
 
-  # client:
-  #   depends_on:
-  #     - api_getter
-  #     - api_setter
+  client:
+    depends_on:
+      - api_getter
+      - api_setter
+    build:
+      context: ./client
+      dockerfile: Dockerfile
 
