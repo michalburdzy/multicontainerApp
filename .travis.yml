@@ -1,0 +1,26 @@
+language: generic
+
+services: docker
+
+before install:
+  - docker build -t testContainer-api_getter -f ./api_getter/Dockerfile ./api_getter
+  - docker build -t testContainer-api_setter -f ./api_getter/Dockerfile ./api_setter
+
+script:
+  - docker run -e CI=true testContainer-api_getter:latest npm run test
+  - docker run -e CI=true testContainer-api_setter:latest npm run test
+
+after_success:
+  - docker build -t multicontainerApp_client ./client
+  - docker build -t multicontainerApp_api_getter ./api_getter
+  - docker build -t multicontainerApp_api_setter ./api_setter
+  - docker build -t multicontainerApp_api_worker ./api_worker
+  - docker build -t multicontainerApp_nginx ./nginx
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
+
+  - docker push mmicalt/multicontainerApp_client
+  - docker push mmicalt/multicontainerApp_api_getter
+  - docker push mmicalt/multicontainerApp_api_setter
+  - docker push mmicalt/multicontainerApp_api_worker
+  - docker push mmicalt/multicontainerApp_nginx
