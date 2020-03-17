@@ -2,7 +2,7 @@ language: generic
 
 services: docker
 
-before install:
+before_install:
   - docker build -t test_container-api_getter -f ./api_getter/Dockerfile ./api_getter
   - docker build -t test_container-api_setter -f ./api_getter/Dockerfile ./api_setter
 
