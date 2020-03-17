@@ -8,7 +8,7 @@ describe("addNoteEndpoint", () => {
   describe("process", () => {
     test("runs correctly", async () => {
       const addNoteService = {
-        process: jest.fn().mockReturnValue("ok")
+        process: jest.fn()
       };
       const endpoint = new AddNoteEndpoint({
         service: addNoteService,
@@ -20,11 +20,8 @@ describe("addNoteEndpoint", () => {
         }
       });
 
-      expect(result.body.message).toBe("ok");
       expect(fakeLogger.info).toBeCalled();
-      expect(addNoteService.process).toBeCalledWith({
-        note: "note"
-      });
+      expect(addNoteService.process).toBeCalledWith("note");
     });
   });
 });
