@@ -3,12 +3,12 @@ language: generic
 services: docker
 
 before install:
-  - docker build -t testContainer-api_getter -f ./api_getter/Dockerfile ./api_getter
-  - docker build -t testContainer-api_setter -f ./api_getter/Dockerfile ./api_setter
+  - docker build -t test_container-api_getter -f ./api_getter/Dockerfile ./api_getter
+  - docker build -t test_container-api_setter -f ./api_getter/Dockerfile ./api_setter
 
 script:
-  - docker run -e CI=true testContainer-api_getter:latest npm run test
-  - docker run -e CI=true testContainer-api_setter:latest npm run test
+  - docker run -e CI=true test_container-api_getter:latest npm run test
+  - docker run -e CI=true test_container-api_setter:latest npm run test
 
 after_success:
   - docker build -t multicontainerApp_client ./client
