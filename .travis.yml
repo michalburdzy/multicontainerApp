@@ -11,11 +11,11 @@ script:
   - docker run -e CI=true test_container-api_setter:latest npm run test
 
 after_success:
-  - docker build -t multicontainer_client ./client
-  - docker build -t multicontainer_api_getter ./api_getter
-  - docker build -t multicontainer_api_setter ./api_setter
-  - docker build -t multicontainer_api_worker ./api_worker
-  - docker build -t multicontainer_nginx ./nginx
+  - docker build -t mmicalt/multicontainer_client ./client
+  - docker build -t mmicalt/multicontainer_api_getter ./api_getter
+  - docker build -t mmicalt/multicontainer_api_setter ./api_setter
+  - docker build -t mmicalt/multicontainer_api_worker ./api_worker
+  - docker build -t mmicalt/multicontainer_nginx ./nginx
 
   - echo "$DOCKER_PASSWORD" | docker login -u "DOCKER_ID" --password-stdin
 
