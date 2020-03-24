@@ -9,7 +9,7 @@ const Notes = () => {
   const fetchNotes = async () => {
     try {
       const response = await axios.get("/api/notes");
-      Array.isArray(response.data)
+      Array.isArray(response.data) && response.data.length > 0
         ? setNotes(response.data)
         : setNotes([{ note: "no notes yet. this is a test note" }]);
     } catch (error) {
