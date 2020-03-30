@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: setter-deployment
+  labels:
+    app: setter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: setter
+  template:
+    metadata:
+      labels:
+        app: setter
+    spec:
+      containers:
+        - name: setter
+          image: mmicalt/multicontainer_api_setter
+          ports:
+            - containerPort: 3002
+          env:
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: envs
+                  key: REDIS_PORT
+            - name: API_SETTER_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: envs
+                  key: API_SETTER_PORT

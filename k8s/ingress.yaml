@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-service
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    kubernetes.io/ingress.class: nginx
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /?(.*)
+        backend:
+          serviceName: client-cluster-service
+          servicePort: 3000
+      - path: /api/getter/?(.*)
+        backend:
+          serviceName: getter-cluster-service
+          servicePort: 3001
+      - path: /api/setter/?(.*)
+        backend:
+          serviceName: setter-cluster-service
+          servicePort: 3002

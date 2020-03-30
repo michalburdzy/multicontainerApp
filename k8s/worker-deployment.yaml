@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-deployment
+  labels:
+    app: worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: worker
+  template:
+    metadata:
+      labels:
+        app: worker
+    spec:
+      containers:
+        - name: worker
+          image: mmicalt/multicontainer_api_worker
+          ports:
+            - containerPort: 3003
+          env:
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
+            - name: REDIS_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: envs
+                  key: REDIS_PORT
+            - name: API_WORKER_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: envs
+                  key: API_WORKER_PORT
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  name: envs
+                  key: PG_USER
+            - name: PG_HOST
+              value: postgres-cluster-ip-service
+            - name: PG_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: envs
+                  key: PG_DATABASE
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: envs
+                  key: PG_PASSWORD
+            - name: PG_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: envs
+                  key: PG_PORT

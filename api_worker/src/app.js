@@ -1,7 +1,3 @@
-const BaseEndpoint = require('./core/baseEndpoint');
-const middlewareFactory = require('./middleware');
-const AppResponse = require('./core/appResponse');
-
 class App {
   constructor({
     config, logger, notesRepository, cacheConnection,
@@ -18,14 +14,13 @@ class App {
   }
 
   async start() {
-    const { appPort } = this.config;
     this.subscriber.on('message', (channel, message) => {
       console.log('WORKER MESSAGE', channel, message)
       return this.insertNoteToDb(message)
     });
     this.subscriber.subscribe('insert');
 
-    console.log(`Worker service listening Redis on ${this.config.redisHost}:${this.config.redisPort}`)
+    console.log(`Worker service listening Redis on ${this.config.redisHost}:${this.config.redisPort} and Postgres on ${this.config.pgHost}:${this.config.pgPort}`)
   }
 }
 

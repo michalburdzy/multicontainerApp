@@ -8,7 +8,7 @@ const Notes = () => {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get("/api/notes");
+      const response = await axios.get("/api/getter/notes");
       Array.isArray(response.data) && response.data.length > 0
         ? setNotes(response.data)
         : setNotes([{ note: "no notes yet. this is a test note" }]);
@@ -28,7 +28,7 @@ const Notes = () => {
     event.preventDefault();
     setIsSubmitting(true);
     try {
-      await axios.post("/api/notes", {
+      await axios.post("/api/setter/notes", {
         note: newNote
       });
     } catch (error) {
