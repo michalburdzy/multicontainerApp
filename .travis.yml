@@ -1,26 +1,30 @@
 language: generic
 
-services: docker
+services: 
+  - docker
+
+branches:
+  only:
+  - kubernetes
 
 before_install:
-  - docker build -t test_container-api_getter -f ./api_getter/Dockerfile ./api_getter
-  - docker build -t test_container-api_setter -f ./api_getter/Dockerfile ./api_setter
+  - docker build -t mmicalt/multicontainer_api_getter -f./api_getter/Dockerfile ./api_getter
+  - docker build -t mmicalt/multicontainer_api_setter -f./api_setter/Dockerfile ./api_setter
+  - docker build -t mmicalt/multicontainer_client -f./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true test_container-api_getter:latest npm run test
-  - docker run -e CI=true test_container-api_setter:latest npm run test
+  - docker run -e CI=true mmicalt/multicontainer_api_getter npm run test
+  - docker run -e CI=true mmicalt/multicontainer_api_setter npm run test
+  - docker run -e CI=true mmicalt/multicontainer_client npm run test
 
 after_success:
-  - docker build -t mmicalt/multicontainer_client ./client
-  - docker build -t mmicalt/multicontainer_api_getter ./api_getter
-  - docker build -t mmicalt/multicontainer_api_setter ./api_setter
-  - docker build -t mmicalt/multicontainer_api_worker ./api_worker
-  - docker build -t mmicalt/multicontainer_nginx ./nginx
+  - docker build -t mmicalt/multicontainer_api_getter -f./api_getter/Dockerfile ./api_getter
+  - docker build -t mmicalt/multicontainer_api_setter -f./api_setter/Dockerfile ./api_setter
+  - docker build -t mmicalt/multicontainer_api_worker -f./api_worker/Dockerfile ./api_worker
+  - docker build -t mmicalt/multicontainer_client -f./client/Dockerfile ./client
 
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
 
-  - docker push mmicalt/multicontainer_client
   - docker push mmicalt/multicontainer_api_getter
   - docker push mmicalt/multicontainer_api_setter
   - docker push mmicalt/multicontainer_api_worker
-  - docker push mmicalt/multicontainer_nginx
