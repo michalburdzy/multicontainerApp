@@ -23,7 +23,7 @@ after_success:
   - docker build -t mmicalt/multicontainer_api_worker -f./api_worker/Dockerfile ./api_worker
   - docker build -t mmicalt/multicontainer_client -f./client/Dockerfile ./client
 
-  echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
+  - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
 
   - docker push mmicalt/multicontainer_api_getter
   - docker push mmicalt/multicontainer_api_setter
