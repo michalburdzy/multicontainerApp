@@ -57,6 +57,6 @@ after_success:
 
 deploy:
   provider: script
-  script bash ./deployment.sh
+  script: bash ./deployment.sh
   on:
     branch: kubernetes
