@@ -1,18 +1,16 @@
-sudo: required
 language: generic
-services: 
+os: linux
+dist: xenial
+
+services:
   - docker
-
-  cache:
+cache: 
   directories:
-  # We cache the SDK so we don't have to download it again on subsequent builds.
-  - $HOME/google-cloud-sdk
-
+    - $HOME/google-cloud-sdk
 env:
   global:
-  # Do not prompt for user input when using any SDK methods.
-  - CLOUDSDK_CORE_DISABLE_PROMPTS=1 
-  - GIT_SHA=${git rev-parse HEAD}
+    - GIT_SHA=$(git rev-parse HEAD)
+    - CLOUDSDK_CORE_DISABLE_PROMPTS=1
 
 branches:
   only:
@@ -28,15 +26,16 @@ before_install:
       # problems on Travis, so ignore stdout.
       curl https://sdk.cloud.google.com | bash > /dev/null;
     fi
-  # This line is critical. We setup the SDK to take precedence in our
-  # environment over the old SDK that is already on the machine.
+
   - source $HOME/google-cloud-sdk/path.bash.inc
   - gcloud components update kubectl
   - gcloud version
   - gcloud auth activate-service-account --key-file service-account.json
-  - gcloud config set project multicontainer-kubernetes 
-  - gcloud config set compute/zone europe-west3-c	
-  - gcloud container clusters get-credentials multicontainer-kubernetes
+  - gcloud config set project multicontainer-kubernetes
+  - gcloud config set compute/zone europe-west3-c
+  - gcloud container clusters get-credentials multicontainer-cluster
+
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
   # build :latest images
   - docker build -t mmicalt/multicontainer_api_getter:latest -f./api_getter/Dockerfile ./api_getter
@@ -47,9 +46,9 @@ before_install:
   - echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
 
 script:
-  - docker run -e CI=true mmicalt/multicontainer_api_getter:$GIT_SHA   npm run test
-  - docker run -e CI=true mmicalt/multicontainer_api_setter:$GIT_SHA   npm run test
-  - docker run -e CI=true mmicalt/multicontainer_client npm:$GIT_SHA   run test
+  - docker run -e CI=true mmicalt/multicontainer_api_getter:$GIT_SHA npm run test
+  - docker run -e CI=true mmicalt/multicontainer_api_setter:$GIT_SHA npm run test
+  - docker run -e CI=true mmicalt/multicontainer_client npm:$GIT_SHA run test
 
 after_success:
   - docker push mmicalt/multicontainer_api_getter:latest
@@ -59,6 +58,6 @@ after_success:
 
 deploy:
   provider: script
-  script bash ./deploy.sh
+  script bash ./deployment.sh
   on:
     branch: kubernetes
