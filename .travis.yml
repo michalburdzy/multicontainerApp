@@ -41,6 +41,12 @@ script:
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_ID --password-stdin
 
+  # push :GIT_SHA images to docker hub
+  - docker push mmicalt/multicontainer_api_getter:$GIT_SHA
+  - docker push mmicalt/multicontainer_api_setter:$GIT_SHA
+  - docker push mmicalt/multicontainer_api_worker:$GIT_SHA
+  - docker push mmicalt/multicontainer_client:$GIT_SHA
+
   - docker push mmicalt/multicontainer_api_getter:latest
   - docker push mmicalt/multicontainer_api_setter:latest
   - docker push mmicalt/multicontainer_api_worker:latest
