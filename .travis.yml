@@ -29,9 +29,9 @@ before_install:
   - gcloud container clusters get-credentials multicontainer-cluster
 
   # build :latest images
-  - docker build -t mmicalt/multicontainer_api_getter:latest -f./api_getter/Dockerfile ./api_getter
-  - docker build -t mmicalt/multicontainer_api_setter:latest -f./api_setter/Dockerfile ./api_setter
-  - docker build -t mmicalt/multicontainer_api_getter:latest -f./api_getter/Dockerfile ./api_getter
+  - docker build -t mmicalt/multicontainer_api_getter:latest -t mmicalt/multicontainer_api_getter:$GIT_SHA -f./api_getter/Dockerfile ./api_getter
+  - docker build -t mmicalt/multicontainer_api_setter:latest -t mmicalt/multicontainer_api_setter:$GIT_SHA -f./api_setter/Dockerfile ./api_setter
+  - docker build -t mmicalt/multicontainer_api_worker:latest -t mmicalt/multicontainer_api_worker:$GIT_SHA -f./api_worker/Dockerfile ./api_worker
   - docker build -t mmicalt/multicontainer_client:latest   -f./client/Dockerfile.dev ./client
 
 script:
