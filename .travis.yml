@@ -37,7 +37,7 @@ before_install:
 script:
   - docker run -e CI=true mmicalt/multicontainer_api_getter:latest npm run test
   - docker run -e CI=true mmicalt/multicontainer_api_setter:latest npm run test
-  - docker run -e CI=true mmicalt/multicontainer_client npm:latest run test
+  - docker run -e CI=true mmicalt/multicontainer_client npm:latest npm run test
 
 after_success:
   - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_ID --password-stdin
