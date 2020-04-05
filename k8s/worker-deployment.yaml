@@ -44,7 +44,7 @@ spec:
                 secretKeyRef:
                   name: envs
                   key: PG_DATABASE
-            - name: PG_PASSWORD
+            - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: envs
