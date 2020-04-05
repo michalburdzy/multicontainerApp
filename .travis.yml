@@ -28,15 +28,11 @@ before_install:
   - gcloud config set compute/zone europe-west3-c
   - gcloud container clusters get-credentials multicontainer-cluster
 
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-
   # build :latest images
   - docker build -t mmicalt/multicontainer_api_getter:latest -f./api_getter/Dockerfile ./api_getter
   - docker build -t mmicalt/multicontainer_api_setter:latest -f./api_setter/Dockerfile ./api_setter
   - docker build -t mmicalt/multicontainer_api_getter:latest -f./api_getter/Dockerfile ./api_getter
   - docker build -t mmicalt/multicontainer_client:latest   -f./client/Dockerfile.dev ./client
-
-  - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_ID --password-stdin
 
 script:
   - docker run -e CI=true mmicalt/multicontainer_api_getter:$GIT_SHA npm run test
@@ -44,6 +40,8 @@ script:
   - docker run -e CI=true mmicalt/multicontainer_client npm:$GIT_SHA run test
 
 after_success:
+  - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_ID --password-stdin
+
   - docker push mmicalt/multicontainer_api_getter:latest
   - docker push mmicalt/multicontainer_api_setter:latest
   - docker push mmicalt/multicontainer_api_worker:latest
